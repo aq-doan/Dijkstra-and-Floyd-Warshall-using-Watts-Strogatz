@@ -51,7 +51,7 @@ void test_graph_operations(const char* filename) {
 }
 
 int main() {
-    /*
+    /* test by inserting in the program
     int vertices = 5;
     Graph G = create_graph(vertices);
 
@@ -76,7 +76,11 @@ int main() {
     
     destroy_graph(G);
     */
+
+    /* test input.txt
     const char* filename = "input.txt";
     test_graph_operations(filename);
+    */
+
     return 0;
 }

@@ -1,8 +1,8 @@
 #pragma once
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
+#include <stdbool.h>
+#include <limits.h>
 
 typedef struct edge {
 	int to_vertex;
@@ -32,3 +32,5 @@ int* get_indegree(Graph G);
 
 
 void destroy_graph(Graph G);
+
+EdgeList shortest_path(Graph G, int source, int* dist, int* prev);
