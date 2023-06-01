@@ -26,12 +26,8 @@ void check_vertex(Graph* self, int vertex);
 
 void ed_add(Graph* self, int from, int to, int w);
 
+void des_g(Graph* G);
 
-int* get_indegree(Graph G);
+EdgeList shortest_path_Dijkstra(Graph* G, int from, int to, int* total);
 
-
-void des_g(Graph G);
-
-EdgeList shortest_path_Dijkstra(Graph G, int from, int* to, int* total);
-
-EdgeList shortest_path_FloydWarshall(Graph G, int source, int* dist, int* prev);
+EdgeList shortest_path_FloydWarshall(Graph* G, int from, int to, int* distance);

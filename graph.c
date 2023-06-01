@@ -63,22 +63,22 @@ void check_vertex(Graph* self, int v) {
 
 //apply Dijkstra shortest path
 void algo_dijkstra_process(Graph* self, int from, int* w, int* current_v) {
-    // Instead of using sets, use an array to determine if each node has been visited
+
     bool* visited = malloc(self->V * sizeof(bool));
 
-    // Initialise the arrays with default values
+
     for (int v = 0; v < self->V; v++) {
         w[v] = INT_MAX / 2;
         current_v[v] = -1;
         visited[v] = false;
     }
 
-    // The source vertex is zero distance from itself
+  
     w[from] = 0;
 
-    // Loop until all vertices have been visited
+
     for (int i = 0; i < self->V; i++) {
-        // Find the vertex with the shortest recorded distance among unvisited vertices
+   
         int u = -1;
         for (int v = 0; v < self->V; v++) {
             if (!visited[v] && (u == -1 || w[v] < w[u])) {
@@ -86,10 +86,9 @@ void algo_dijkstra_process(Graph* self, int from, int* w, int* current_v) {
             }
         }
 
-        // Mark as visited
         visited[u] = true;
 
-        // Update the distances and previous vertices for adjacent unvisited vertices
+     
         EdgeNodePtr current = self->edges[u].head;
         while (current != NULL) {
             int dest = current->edge.to_vertex;
@@ -168,7 +167,7 @@ void algo_floyd_warshall_process(Graph* self, int** total_array, int** to_array)
     }
 }
 
-EdgeList find_shortest_path_B(Graph* self, int from, int to, int* distance) {
+EdgeList shortest_path_FloydWarshall(Graph* self, int from, int to, int* distance) {
     int** distance_array = malloc(self->V * sizeof(*distance_array));
     int** n_array = malloc(self->V * sizeof(*n_array));
 
@@ -197,7 +196,7 @@ EdgeList find_shortest_path_B(Graph* self, int from, int to, int* distance) {
             shortest_path.head = n_ed;
         }
     }
-
+    
     for (int i = 0; i < self->V; i++) {
         free(distance_array[i]);
         free(n_array[i]);
@@ -206,33 +205,6 @@ EdgeList find_shortest_path_B(Graph* self, int from, int to, int* distance) {
     free(n_array);
 
     return shortest_path;
-}
-
-
-
-
-
-int* get_indegree(Graph G)
-{
-    EdgeNodePtr c;
-    int* in = calloc(G.V, sizeof(int));
-
-
-    for (int i = 0; i < G.V; i++) {
-        in[i] = 0;
-    }
-
-    for (int i = 0; i < G.V; i++) {
-        c = G.edges[i].head;
-
-        while (c != NULL) {
-            int to_vertex = c->edge.to_vertex;
-            in[to_vertex]++;
-            c = c->next;
-        }
-
-    }
-    return in;
 }
 
 void des_g(Graph* self) {
