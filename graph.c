@@ -227,4 +227,39 @@ void des_g(Graph* self) {
     self->V = 0;
 }
 
+Graph watts_strogatz(int n, int k, float beta) {
+    Graph G;
+    G.V = n;
+    G.edges = malloc(G.V * sizeof * G.edges);
 
+    for (int i = 0; i < G.V; i++) {
+        G.edges[i].head = NULL;
+    }
+
+    for (int u = 0; u < G.V; u++) {
+        // add edges for neighbors
+        for (int i = 1; i <= k / 2; i++) {
+            int v = (u + i) % G.V;
+
+            // add edges to random vertices with probability beta
+            if ((float)rand() / RAND_MAX < beta) {
+                v = (int)(((float)rand() / RAND_MAX) * G.V);
+            }
+
+            // add edges in both directions
+            EdgeNodePtr uv;
+            uv = malloc(sizeof * uv);
+            uv->edge.to_vertex = v;
+            uv->next = G.edges[u].head;
+            G.edges[u].head = uv;
+
+            EdgeNodePtr vu;
+            vu = malloc(sizeof * vu);
+            vu->edge.to_vertex = u;
+            vu->next = G.edges[v].head;
+            G.edges[v].head = vu;
+        }
+    }
+
+    return G;
+}
