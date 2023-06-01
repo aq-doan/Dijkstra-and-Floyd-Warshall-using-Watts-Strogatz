@@ -195,8 +195,27 @@ EdgeList shortest_path_FloydWarshall(Graph* self, int from, int to, int* distanc
             n_ed->next = shortest_path.head;
             shortest_path.head = n_ed;
         }
+
+        // Add the last vertex (to) to the path
+        EdgeNodePtr n_ed = malloc(sizeof(*n_ed));
+        n_ed->edge.to_vertex = to;
+        n_ed->edge.weight = 0;
+        n_ed->next = shortest_path.head;
+        shortest_path.head = n_ed;
+
+        // Reverse the order of vertices in the path
+        EdgeNodePtr prev = NULL;
+        EdgeNodePtr current = shortest_path.head;
+        EdgeNodePtr next = NULL;
+        while (current != NULL) {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        shortest_path.head = prev;
     }
-    
+
     for (int i = 0; i < self->V; i++) {
         free(distance_array[i]);
         free(n_array[i]);
@@ -206,6 +225,7 @@ EdgeList shortest_path_FloydWarshall(Graph* self, int from, int to, int* distanc
 
     return shortest_path;
 }
+
 
 void des_g(Graph* self) {
     // Free the individual edge nodes for each vertex
@@ -227,6 +247,7 @@ void des_g(Graph* self) {
     self->V = 0;
 }
 
+//generate graph and randomly add weight to the edge
 Graph watts_strogatz(int size, int neighbours, float alpha) {
     srand(time(NULL));  // Seed the random number generator
     Graph G;
