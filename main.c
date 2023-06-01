@@ -1,30 +1,10 @@
-
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include <limits.h>
+#include <string.h>
 #include "graph.h"
-#define NUM_VERTICES 1000
-
-// Function to generate a random weight between 1 and 100
-int generate_random_weight() {
-    return rand() % 100 + 1; // Generate random weight between 1 and 100
-}
-
-// Function to create a graph with random weighted edges
-Graph create_random_graph(int num_vertices) {
-    Graph G = new_g(num_vertices);
-
-    // Add random weighted edges to the graph
-    for (int i = 0; i < num_vertices; i++) {
-        for (int j = i + 1; j < num_vertices; j++) {
-            ed_add(&G, i, j, generate_random_weight());
-        }
-    }
-
-    return G;
-}
 
 // Function to print the shortest path
 void print_shortest_path(EdgeList path, int total_distance) {
@@ -58,52 +38,65 @@ void cleanup_graph(Graph* G) {
     des_g(G);
 }
 
+
 int main() {
+    int num_vertices;
+    printf("Enter the number of vertices: ");
+    scanf("%d", &num_vertices);
 
-    /* test by inserting in the program
-    int vertices = 5;
-    Graph G = create_graph(vertices);
+    Graph G = new_g(num_vertices);
 
-    // Add edges to the graph
-    add_edge(G, 0, 1);
-    add_edge(G, 0, 2);
-    add_edge(G, 1, 3);
-    add_edge(G, 2, 3);
-    add_edge(G, 3, 4);
+    for (int i = 0; i < num_vertices; i++) {
+        int num_edges;
+        printf("Enter the number of edges for vertex %d: ", i);
+        scanf("%d", &num_edges);
 
-    // Get the indegree of each vertex
-    int* indegree = get_indegree(G);
-    printf("Indegree of each vertex:\n");
-    for (int i = 0; i < G.V; i++) {
-        printf("Vertex %d: %d\n", i, indegree[i]);
+        for (int j = 0; j < num_edges; j++) {
+            int to_vertex, weight;
+            printf("Enter the edge (to_vertex, weight) for vertex %d: ", i);
+            scanf("%d %d", &to_vertex, &weight);
+
+            ed_add(&G, i, to_vertex, weight);
+        }
     }
-    free(indegree);
 
-    // Destroy the graph to free memory
-    destroy_graph(G);
+    int from, to;
+    printf("Enter the source vertex: ");
+    scanf("%d", &from);
+    printf("Enter the destination vertex: ");
+    scanf("%d", &to);
 
+    // Calculate the shortest path using Dijkstra's algorithm
+    int total_distance;
+    EdgeList dijkstra_path = shortest_path_Dijkstra(&G, from, to, &total_distance);
 
-    destroy_graph(G);
-    */
+    // Print the shortest path and total distance
+    printf("Dijkstra's shortest path from vertex %d to %d:\n", from, to);
+    EdgeNodePtr current = dijkstra_path.head;
+    while (current != NULL) {
+        printf("%d -> ", current->edge.to_vertex);
+        current = current->next;
+    }
+    printf("NULL\n");
+    printf("Total distance: %d\n", total_distance);
 
-    /* test input.txt
-    const char* filename = "input.txt";
-    test_graph_operations(filename);
-    */
-    srand(time(NULL)); // Initialize random number generator
+    // Calculate the shortest path using Floyd-Warshall algorithm
+    EdgeList floyd_path = shortest_path_FloydWarshall(&G, from, to, &total_distance);
 
-    int num_vertices = 10;
-    Graph G = create_random_graph(num_vertices);
-
-    // Test Dijkstra's shortest path algorithm
-    test_dijkstra_shortest_path(&G, 0, num_vertices - 1);
-
-    // Test Floyd-Warshall shortest path algorithm
-    test_floyd_warshall_shortest_path(&G, 0, num_vertices - 1);
+    // Print the shortest path and total distance
+    printf("Floyd-Warshall shortest path from vertex %d to %d:\n", from, to);
+    current = floyd_path.head;
+    while (current != NULL) {
+        printf("%d -> ", current->edge.to_vertex);
+        current = current->next;
+    }
+    printf("NULL\n");
+    printf("Total distance: %d\n", total_distance);
 
     // Clean up the graph
-    cleanup_graph(&G);
+    des_g(&G);
 
+   
     return 0;
 }
 

@@ -56,9 +56,8 @@ void ed_add(Graph* self, int from, int to, int w) {
 
 // Check for vertex in a graph
 // and an error message will be displayed automatically.
-void check_vertex(Graph* self, int v) {
-    assert(v >= 0 && v < self->V);
-    
+void check_vertex(Graph* self, int vertex) {
+    assert(vertex >= 0 && vertex < self->V + 1);
 }
 
 //apply Dijkstra shortest path
@@ -74,7 +73,7 @@ void algo_dijkstra_process(Graph* self, int from, int* w, int* current_v) {
     }
 
   
-    w[from] = 0;
+    w[from] = 0; 
 
 
     for (int i = 0; i < self->V; i++) {
@@ -172,10 +171,11 @@ EdgeList shortest_path_FloydWarshall(Graph* self, int from, int to, int* distanc
     int** n_array = malloc(self->V * sizeof(*n_array));
 
     for (int i = 0; i < self->V; i++) {
-        distance_array[i] = malloc(self->V * sizeof(**distance_array));
-        n_array[i] = malloc(self->V * sizeof(**n_array));
-        memset(distance_array[i], INT_MAX / 2, self->V * sizeof(**distance_array));
-        memset(n_array[i], -1, self->V * sizeof(**n_array));
+        distance_array[i] = malloc(self->V * sizeof(int));
+        memset(distance_array[i], INT_MAX / 2, self->V * sizeof(int));
+        n_array[i] = malloc(self->V * sizeof(int));
+        memset(n_array[i], -1, self->V * sizeof(int));
+
         distance_array[i][i] = 0;
     }
 
