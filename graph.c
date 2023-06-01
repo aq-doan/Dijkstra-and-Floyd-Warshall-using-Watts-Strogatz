@@ -8,6 +8,9 @@
 #include <limits.h>
 #include "graph.h"
 #include <assert.h>
+typedef int bool;
+#define true 1
+#define false 0
 
 
 Graph new_g(int v) {
@@ -58,6 +61,51 @@ void check_vertex(Graph* self, int v) {
     
 }
 
+//apply Dijkstra shortest path
+void algo_dijkstra_process(Graph* self, int from, int* w, int* current_v) {
+    // Instead of using sets, use an array to determine if each node has been visited
+    bool* visited = malloc(self->V * sizeof(bool));
+
+    // Initialise the arrays with default values
+    for (int v = 0; v < self->V; v++) {
+        w[v] = INT_MAX / 2;
+        current_v[v] = -1;
+        visited[v] = false;
+    }
+
+    // The source vertex is zero distance from itself
+    w[from] = 0;
+
+    // Loop until all vertices have been visited
+    for (int i = 0; i < self->V; i++) {
+        // Find the vertex with the shortest recorded distance among unvisited vertices
+        int u = -1;
+        for (int v = 0; v < self->V; v++) {
+            if (!visited[v] && (u == -1 || w[v] < w[u])) {
+                u = v;
+            }
+        }
+
+        // Mark as visited
+        visited[u] = true;
+
+        // Update the distances and previous vertices for adjacent unvisited vertices
+        EdgeNodePtr current = self->edges[u].head;
+        while (current != NULL) {
+            int dest = current->edge.to_vertex;
+            if (!visited[dest]) {
+                int alt = w[u] + current->edge.weight;
+                if (alt < w[dest]) {
+                    w[dest] = alt;
+                    current_v[dest] = u;
+                }
+            }
+            current = current->next;
+        }
+    }
+
+    free(visited);
+}
 
 int* get_indegree(Graph G)
 {

@@ -1,4 +1,5 @@
-#pragma once
+﻿#pragma once
+
 
 typedef struct edge {
 	int to_vertex;
