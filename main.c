@@ -24,10 +24,6 @@ void test_floyd_warshall_shortest_path(Graph* G, int from, int to) {
     //print_shortest_path(floyd_path, total_distance);
 }
 
-// Function to clean up the graph
-void cleanup_graph(Graph* G) {
-    des_g(G);
-}
 
 void print_shortest_pathA(EdgeList path, int total_distance) {
     EdgeNodePtr current = path.head;
@@ -53,20 +49,34 @@ void print_shortest_pathB(EdgeList path, int total_distance) {
 
     }
     free(current);
-
 }
 
 int main() {
-    int size = 100;
-    int neighbours = 15;
-    float alpha = 1;
+    int size, neighbours;
+    float alpha;
+
+    printf("Enter the graph size: ");
+    scanf("%d", &size);
+
+    printf("Enter the number of neighbors: ");
+    scanf("%d", &neighbours);
+
+    printf("Enter the alpha value: ");
+    scanf("%f", &alpha);
 
     Graph G = watts_strogatz(size, neighbours, alpha);
     Graph G2 = G;
-    int from1 = 0;
-    int to1 = size - 1;
-    int from2 = 0;
-    int to2 = size - 1;
+
+    int from1, to1, from2, to2;
+
+    printf("Enter the source vertex for Dijkstra's algorithm: ");
+    scanf("%d", &from1);
+
+    printf("Enter the destination vertex for Dijkstra's algorithm: ");
+    scanf("%d", &to1);
+    from2 = from1;
+    to2 = to1;
+   
     int distance_dijkstra;
     EdgeList shortest_path_dijkstra = shortest_path_Dijkstra(&G, from1, to1, &distance_dijkstra);
 
@@ -77,7 +87,7 @@ int main() {
     printf("Distance: %d\n", distance_dijkstra);
     printf("Path: ");
     print_shortest_pathA(shortest_path_dijkstra, distance_dijkstra);
-
+    printf("\n");
     printf("Shortest path from vertex %d to %d using Floyd-Warshall algorithm:\n", from2, to2);
     printf("Distance: %d\n", distance_floydwarshall);
     printf("Path: ");
@@ -88,6 +98,7 @@ int main() {
 
     return 0;
 }
+
 
 
 
