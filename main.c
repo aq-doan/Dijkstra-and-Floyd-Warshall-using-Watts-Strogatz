@@ -95,6 +95,7 @@ int main() {
 
     // Cleanup
     des_g(&G);
+    des_g(&G2);
 
     return 0;
 }

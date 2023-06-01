@@ -245,6 +245,7 @@ void des_g(Graph* self) {
     // Reset the graph structure
     self->edges = NULL;
     self->V = 0;
+    free(self);
 }
 
 //generate graph and randomly add weight to the edge
