@@ -82,24 +82,24 @@ int* get_indegree(Graph G)
     return in;
 }
 
+void des_g(Graph* self) {
+    // Free the individual edge nodes for each vertex
+    for (int v = 0; v < self->V; v++) {
+        EdgeNodePtr current = self->edges[v].head;
 
-
-
-
-
-
-
-void des_g(Graph G) {
-
-    for (int i = 0; i < G.V; i++) {
-        EdgeNodePtr c = G.edges[i].head;
-
-        while (c != NULL) {
-            EdgeNodePtr free_graph = c;
-            c = c->next;
-            free(free_graph);
+        while (current != NULL) {
+            EdgeNodePtr to_free = current;
+            current = current->next;
+            free(to_free);
         }
     }
-    free(G.edges);
+
+    // Free the edges array
+    free(self->edges);
+
+    // Reset the graph structure
+    self->edges = NULL;
+    self->V = 0;
 }
+
 
