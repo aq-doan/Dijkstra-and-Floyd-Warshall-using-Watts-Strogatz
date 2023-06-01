@@ -1,8 +1,8 @@
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
-
 Graph read_graph_from_file(const char* filename) {
     FILE* file = fopen(filename, "r");
     if (file == NULL) {
@@ -12,7 +12,7 @@ Graph read_graph_from_file(const char* filename) {
 
     int num_vertices;
     fscanf(file, "%d", &num_vertices);
-    Graph G = create_graph(num_vertices);
+    Graph G = new_g(num_vertices);
 
     for (int i = 0; i < num_vertices; i++) {
         int vertex, num_edges;
@@ -22,7 +22,7 @@ Graph read_graph_from_file(const char* filename) {
         for (int j = 0; j < num_edges; j++) {
             int to_vertex, weight;
             fscanf(file, "%d,%d", &to_vertex, &weight);
-            add_edge(G, vertex, to_vertex);
+            ed_add(G, vertex, to_vertex);
         }
     }
 
@@ -47,7 +47,7 @@ void test_graph_operations(const char* filename) {
 
     print_indegree(G);
 
-    destroy_graph(G);
+    des_g(G);
 }
 
 int main() {
@@ -81,6 +81,6 @@ int main() {
     const char* filename = "input.txt";
     test_graph_operations(filename);
     */
-
-    return 0;
+return 0;
 }
+    
