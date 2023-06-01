@@ -21,7 +21,9 @@ typedef struct graph {
 
 Graph new_g(int v);
 
-void ed_add(Graph G, int from, int to);
+void check_vertex(Graph* self, int vertex);
+
+void ed_add(Graph* self, int from, int to, int w);
 
 
 int* get_indegree(Graph G);

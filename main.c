@@ -3,52 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
-Graph read_graph_from_file(const char* filename) {
-    FILE* file = fopen(filename, "r");
-    if (file == NULL) {
-        fprintf(stderr, "Error opening file: %s\n", filename);
-        exit(EXIT_FAILURE);
-    }
-
-    int num_vertices;
-    fscanf(file, "%d", &num_vertices);
-    Graph G = new_g(num_vertices);
-
-    for (int i = 0; i < num_vertices; i++) {
-        int vertex, num_edges;
-        fscanf(file, "%d", &vertex);
-        fscanf(file, "%d", &num_edges);
-
-        for (int j = 0; j < num_edges; j++) {
-            int to_vertex, weight;
-            fscanf(file, "%d,%d", &to_vertex, &weight);
-            ed_add(G, vertex, to_vertex);
-        }
-    }
-
-    fclose(file);
-    return G;
-}
-
-void print_indegree(Graph G) {
-    int* indegree = get_indegree(G);
-    printf("Indegree of each vertex:\n");
-    for (int i = 0; i < G.V; i++) {
-        printf("Vertex %d: %d\n", i, indegree[i]);
-    }
-    free(indegree);
-}
-
-void test_graph_operations(const char* filename) {
-    Graph G = read_graph_from_file(filename);
-
-    printf("Graph created from %s:\n", filename);
-    printf("Number of vertices: %d\n", G.V);
-
-    print_indegree(G);
-
-    des_g(G);
-}
 
 int main() {
     /* test by inserting in the program

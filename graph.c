@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include "graph.h"
+#include <assert.h>
 
 
 Graph new_g(int v) {
@@ -22,19 +23,40 @@ Graph new_g(int v) {
     return G;
 }
 
-/*Adds an edges to the AdgeList */
-void ed_add(Graph G, int from, int to) {
-    EdgeNodePtr node = malloc(sizeof(*node));
+//add weighted edge to the graph
+void ed_add(Graph* self, int from, int to, int w) {
+    // ensure both vertices are valid
+    check_vertex(self, from);
+    check_vertex(self, to);
+
+    // create a new edge node
+    EdgeNodePtr node = (EdgeNodePtr)malloc(sizeof(struct edgeNode));
     if (node == NULL) {
-        fprintf(stderr, "Error allocating memory for EdgeNode in add_edge().\n");
-        exit(EXIT_FAILURE);
+        fprintf(stderr, "Memory allocation failed\n");
+        return;
+    }
+    node->edge.to_vertex = to;
+    node->edge.weight = w;
+    node->next = NULL;
+
+    // find the correct position to insert the new edge node
+    EdgeNodePtr* current = &(self->edges[from].head);
+    while (*current != NULL && (*current)->edge.to_vertex < to) {
+        current = &((*current)->next);
     }
 
-    node->edge.to_vertex = to;
-    node->next = G.edges[from].head;
-    G.edges[from].head = node;
+    // insert the new edge node
+    node->next = *current;
+    *current = node;
 }
 
+
+// Check for vertex in a graph
+// and an error message will be displayed automatically.
+void check_vertex(Graph* self, int v) {
+    assert(v >= 0 && v < self->V);
+    
+}
 
 
 int* get_indegree(Graph G)
