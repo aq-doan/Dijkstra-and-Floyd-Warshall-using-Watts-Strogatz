@@ -107,7 +107,6 @@ void algo_dijkstra_process(Graph* self, int from, int* w, int* current_v) {
     free(visited);
 }
 //apply Dijkstra
-#include "graph.h"
 
 EdgeList shortest_path_Dijkstra(Graph* self, int from, int to, int* total) {
     int* a = malloc(self->V * sizeof(int));
@@ -133,6 +132,82 @@ EdgeList shortest_path_Dijkstra(Graph* self, int from, int to, int* total) {
 
     return shortest_path;
 }
+
+// Apply Floyd–Warshall algorithm on a graph by solving all pairs shortest paths.
+void algo_floyd_warshall_process(Graph* self, int** total_array, int** to_array) {
+    int V = self->V;
+
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            total_array[i][j] = INT_MAX / 2;
+            to_array[i][j] = -1;
+        }
+    }
+
+    for (int v = 0; v < V; v++) {
+        EdgeNodePtr current = self->edges[v].head;
+        while (current != NULL) {
+            int to = current->edge.to_vertex;
+            total_array[v][to] = current->edge.weight;
+            to_array[v][to] = to;
+            current = current->next;
+        }
+        total_array[v][v] = 0;
+    }
+
+    for (int k = 0; k < V; k++) {
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                int new_dist = total_array[i][k] + total_array[k][j];
+                if (new_dist < total_array[i][j]) {
+                    total_array[i][j] = new_dist;
+                    to_array[i][j] = to_array[i][k];
+                }
+            }
+        }
+    }
+}
+
+EdgeList find_shortest_path_B(Graph* self, int from, int to, int* distance) {
+    int** distance_array = malloc(self->V * sizeof(*distance_array));
+    int** n_array = malloc(self->V * sizeof(*n_array));
+
+    for (int i = 0; i < self->V; i++) {
+        distance_array[i] = malloc(self->V * sizeof(**distance_array));
+        n_array[i] = malloc(self->V * sizeof(**n_array));
+        memset(distance_array[i], INT_MAX / 2, self->V * sizeof(**distance_array));
+        memset(n_array[i], -1, self->V * sizeof(**n_array));
+        distance_array[i][i] = 0;
+    }
+
+    algo_floyd_warshall_process(self, distance_array, n_array);
+
+    if (distance != NULL) {
+        *distance = distance_array[from][to];
+    }
+
+    EdgeList shortest_path = { .head = NULL };
+
+    if (n_array[from][to] != -1) {
+        for (int vertex = from; vertex != to; vertex = n_array[vertex][to]) {
+            EdgeNodePtr n_ed = malloc(sizeof(*n_ed));
+            n_ed->edge.to_vertex = vertex;
+            n_ed->edge.weight = 0;
+            n_ed->next = shortest_path.head;
+            shortest_path.head = n_ed;
+        }
+    }
+
+    for (int i = 0; i < self->V; i++) {
+        free(distance_array[i]);
+        free(n_array[i]);
+    }
+    free(distance_array);
+    free(n_array);
+
+    return shortest_path;
+}
+
 
 
 
