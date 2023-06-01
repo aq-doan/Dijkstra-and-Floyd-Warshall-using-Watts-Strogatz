@@ -228,6 +228,7 @@ void des_g(Graph* self) {
 }
 
 Graph watts_strogatz(int n, int k, float beta) {
+    srand(time(NULL));  // Seed the random number generator
     Graph G;
     G.V = n;
     G.edges = malloc(G.V * sizeof * G.edges);
@@ -250,12 +251,14 @@ Graph watts_strogatz(int n, int k, float beta) {
             EdgeNodePtr uv;
             uv = malloc(sizeof * uv);
             uv->edge.to_vertex = v;
+            uv->edge.weight = rand() % 100;  // Assign a random weight between 0 and 99
             uv->next = G.edges[u].head;
             G.edges[u].head = uv;
 
             EdgeNodePtr vu;
             vu = malloc(sizeof * vu);
             vu->edge.to_vertex = u;
+            vu->edge.weight = rand() % 100;  // Assign a random weight between 0 and 99
             vu->next = G.edges[v].head;
             G.edges[v].head = vu;
         }

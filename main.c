@@ -37,66 +37,35 @@ void test_floyd_warshall_shortest_path(Graph* G, int from, int to) {
 void cleanup_graph(Graph* G) {
     des_g(G);
 }
+void display_graph(Graph* G) {
+    for (int v = 0; v < G->V; v++) {
+        printf("Vertex %d: ", v);
+
+        EdgeNodePtr current = G->edges[v].head;
+        while (current != NULL) {
+            printf("(%d, weight: %d) ", current->edge.to_vertex, current->edge.weight);
+            current = current->next;
+        }
+
+        printf("\n");
+    }
+}
 
 
 int main() {
-    int num_vertices;
-    printf("Enter the number of vertices: ");
-    scanf("%d", &num_vertices);
+    // Generate the graph
+    int num_vertices = 6;
+    int k = 2;
+    float beta = 0.5;
+    Graph G = watts_strogatz(num_vertices, k, beta);
 
-    Graph G = new_g(num_vertices);
-
-    for (int i = 0; i < num_vertices; i++) {
-        int num_edges;
-        printf("Enter the number of edges for vertex %d: ", i);
-        scanf("%d", &num_edges);
-
-        for (int j = 0; j < num_edges; j++) {
-            int to_vertex, weight;
-            printf("Enter the edge (to_vertex, weight) for vertex %d: ", i);
-            scanf("%d %d", &to_vertex, &weight);
-
-            ed_add(&G, i, to_vertex, weight);
-        }
-    }
-
-    int from, to;
-    printf("Enter the source vertex: ");
-    scanf("%d", &from);
-    printf("Enter the destination vertex: ");
-    scanf("%d", &to);
-
-    // Calculate the shortest path using Dijkstra's algorithm
-    int total_distance;
-    EdgeList dijkstra_path = shortest_path_Dijkstra(&G, from, to, &total_distance);
-
-    // Print the shortest path and total distance
-    printf("Dijkstra's shortest path from vertex %d to %d:\n", from, to);
-    EdgeNodePtr current = dijkstra_path.head;
-    while (current != NULL) {
-        printf("%d -> ", current->edge.to_vertex);
-        current = current->next;
-    }
-    printf("NULL\n");
-    printf("Total distance: %d\n", total_distance);
-
-    // Calculate the shortest path using Floyd-Warshall algorithm
-    EdgeList floyd_path = shortest_path_FloydWarshall(&G, from, to, &total_distance);
-
-    // Print the shortest path and total distance
-    printf("Floyd-Warshall shortest path from vertex %d to %d:\n", from, to);
-    current = floyd_path.head;
-    while (current != NULL) {
-        printf("%d -> ", current->edge.to_vertex);
-        current = current->next;
-    }
-    printf("NULL\n");
-    printf("Total distance: %d\n", total_distance);
+    // Display the graph
+    display_graph(&G);
 
     // Clean up the graph
     des_g(&G);
 
-   
     return 0;
 }
+
 

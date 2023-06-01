@@ -31,3 +31,4 @@ void des_g(Graph* G);
 EdgeList shortest_path_Dijkstra(Graph* G, int from, int to, int* total);
 
 EdgeList shortest_path_FloydWarshall(Graph* G, int from, int to, int* distance);
+Graph watts_strogatz(int n, int k, float beta);
