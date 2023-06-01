@@ -106,6 +106,36 @@ void algo_dijkstra_process(Graph* self, int from, int* w, int* current_v) {
 
     free(visited);
 }
+//apply Dijkstra
+#include "graph.h"
+
+EdgeList shortest_path_Dijkstra(Graph* self, int from, int to, int* total) {
+    int* a = malloc(self->V * sizeof(int));
+    int* b = malloc(self->V * sizeof(int));
+    algo_dijkstra_process(self, from, a, b);
+
+    if (total != NULL) {
+        *total = a[to];
+    }
+
+    EdgeList shortest_path = { .head = NULL };
+
+    while (to != -1) {
+        EdgeNodePtr n = malloc(sizeof(struct edgeNode));
+        *n = (struct edgeNode){ .edge.to_vertex = to, .edge.weight = 0 };
+        n->next = shortest_path.head;
+        shortest_path.head = n;
+        to = b[to];
+    }
+
+    free(a);
+    free(b);
+
+    return shortest_path;
+}
+
+
+
 
 int* get_indegree(Graph G)
 {
