@@ -227,10 +227,10 @@ void des_g(Graph* self) {
     self->V = 0;
 }
 
-Graph watts_strogatz(int n, int k, float beta) {
+Graph watts_strogatz(int size, int neighbours, float alpha) {
     srand(time(NULL));  // Seed the random number generator
     Graph G;
-    G.V = n;
+    G.V = size;
     G.edges = malloc(G.V * sizeof * G.edges);
 
     for (int i = 0; i < G.V; i++) {
@@ -239,11 +239,11 @@ Graph watts_strogatz(int n, int k, float beta) {
 
     for (int u = 0; u < G.V; u++) {
         // add edges for neighbors
-        for (int i = 1; i <= k / 2; i++) {
+        for (int i = 1; i <= neighbours / 2; i++) {
             int v = (u + i) % G.V;
 
             // add edges to random vertices with probability beta
-            if ((float)rand() / RAND_MAX < beta) {
+            if ((float)rand() / RAND_MAX < alpha) {
                 v = (int)(((float)rand() / RAND_MAX) * G.V);
             }
 
@@ -266,3 +266,4 @@ Graph watts_strogatz(int n, int k, float beta) {
 
     return G;
 }
+
