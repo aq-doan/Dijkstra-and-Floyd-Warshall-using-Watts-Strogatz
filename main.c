@@ -16,6 +16,20 @@ void test_dijkstra_shortest_path(Graph* G, int from, int to) {
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     printf("Dijkstra's shortest path from vertex %d to %d:\n", from, to);
     printf("Execution time: %.6f seconds\n", execution_time);
+
+    size_t path_size = 0;
+    EdgeNodePtr current = dijkstra_path.head;
+    while (current != NULL) {
+        path_size += sizeof(Edge);
+        current = current->next;
+    }
+
+    size_t graph_size = sizeof(Graph);
+
+    printf("Memory space used by Dijkstra's algorithm:\n");
+    printf("Path size: %zu bytes\n", path_size);
+    printf("Graph size: %zu bytes\n", graph_size);
+
     // print_shortest_path(dijkstra_path, total_distance);
     // Cleanup dijkstra_path
     // ...
@@ -31,6 +45,20 @@ void test_floyd_warshall_shortest_path(Graph* G, int from, int to) {
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     printf("Floyd-Warshall shortest path from vertex %d to %d:\n", from, to);
     printf("Execution time: %.6f seconds\n", execution_time);
+
+    size_t path_size = 0;
+    EdgeNodePtr current = floyd_path.head;
+    while (current != NULL) {
+        path_size += sizeof(Edge);
+        current = current->next;
+    }
+
+    size_t graph_size = sizeof(Graph);
+
+    printf("Memory space used by Floyd-Warshall algorithm:\n");
+    printf("Path size: %zu bytes\n", path_size);
+    printf("Graph size: %zu bytes\n", graph_size);
+
     // print_shortest_path(floyd_path, total_distance);
     // Cleanup floyd_path
     // ...
@@ -54,10 +82,10 @@ int main() {
 
     int from1, to1, from2, to2;
 
-    printf("Enter the source vertex for Dijkstra's algorithm: ");
+    printf("Enter the source vertex for algorithms: ");
     scanf("%d", &from1);
 
-    printf("Enter the destination vertex for Dijkstra's algorithm: ");
+    printf("Enter the destination vertex for algorithms: ");
     scanf("%d", &to1);
     from2 = from1;
     to2 = to1;
@@ -85,3 +113,4 @@ int main() {
 
     return 0;
 }
+
