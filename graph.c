@@ -72,12 +72,12 @@ void algo_dijkstra_process(Graph* self, int from, int* w, int* current_v) {
         visited[v] = false;
     }
 
-  
-    w[from] = 0; 
+
+    w[from] = 0;
 
 
     for (int i = 0; i < self->V; i++) {
-   
+
         int u = -1;
         for (int v = 0; v < self->V; v++) {
             if (!visited[v] && (u == -1 || w[v] < w[u])) {
@@ -87,7 +87,7 @@ void algo_dijkstra_process(Graph* self, int from, int* w, int* current_v) {
 
         visited[u] = true;
 
-     
+
         EdgeNodePtr current = self->edges[u].head;
         while (current != NULL) {
             int dest = current->edge.to_vertex;
@@ -288,4 +288,3 @@ Graph watts_strogatz(int size, int neighbours, float alpha) {
 
     return G;
 }
-
