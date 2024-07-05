@@ -1,9 +1,4 @@
-﻿
-/*
-* Anh Quan Doan 624501
-*/
-
-#include <stdlib.h>
+﻿#include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
 #include "graph.h"
